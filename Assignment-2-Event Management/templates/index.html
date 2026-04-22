@@ -1,0 +1,110 @@
+{# index.html — Home / Landing Page #}
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<!-- ── Hero Section ── -->
+<section class="hero">
+  <div class="hero-content">
+    <span class="hero-badge"><i class="fa-solid fa-bolt"></i> Live Events Near You</span>
+    <h1>Discover &amp; Join<br><span class="gradient-text">Amazing Events</span></h1>
+    <p class="hero-sub">From tech summits to cultural festivals — find, register, and enjoy events that matter to you.</p>
+    <div class="hero-actions">
+      <a href="{{ url_for('events_page') }}" class="btn btn-primary btn-lg">
+        <i class="fa-solid fa-magnifying-glass"></i> Explore Events
+      </a>
+      <a href="{{ url_for('register') }}" class="btn btn-outline btn-lg">
+        <i class="fa-solid fa-ticket"></i> Register Now
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num">50+</span><span class="stat-label">Events</span></div>
+      <div class="stat"><span class="stat-num">5K+</span><span class="stat-label">Attendees</span></div>
+      <div class="stat"><span class="stat-num">20+</span><span class="stat-label">Cities</span></div>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-card-float card-1">
+      <i class="fa-solid fa-microphone-lines"></i>
+      <span>Live Music</span>
+    </div>
+    <div class="hero-card-float card-2">
+      <i class="fa-solid fa-laptop-code"></i>
+      <span>Tech Talks</span>
+    </div>
+    <div class="hero-card-float card-3">
+      <i class="fa-solid fa-utensils"></i>
+      <span>Food Fest</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── Featured Events ── -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Featured Events</h2>
+      <a href="{{ url_for('events_page') }}" class="btn btn-ghost">View All <i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+    <div class="events-grid">
+      {% for event in featured %}
+      <article class="event-card">
+        <figure class="event-img">
+          <img src="{{ event.image_url }}" alt="{{ event.name }}" loading="lazy" />
+          <span class="event-category">{{ event.category }}</span>
+        </figure>
+        <div class="event-body">
+          <h3 class="event-title">{{ event.name }}</h3>
+          <div class="event-meta">
+            <span><i class="fa-regular fa-calendar"></i> {{ event.date }}</span>
+            <span><i class="fa-regular fa-clock"></i> {{ event.time }}</span>
+          </div>
+          <div class="event-meta">
+            <span><i class="fa-solid fa-location-dot"></i> {{ event.venue }}</span>
+          </div>
+          <p class="event-desc">{{ event.description[:120] }}…</p>
+          <div class="event-footer">
+            <span class="rsvp-count"><i class="fa-solid fa-users"></i> {{ event.rsvp_count }} going</span>
+            <a href="{{ url_for('register') }}?event_id={{ event.id }}" class="btn btn-primary btn-sm">Register</a>
+          </div>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ── Why EventHub ── -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-header center">
+      <h2>Why Choose EventHub?</h2>
+      <p>Everything you need to discover and attend great events.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fa-solid fa-bolt"></i></div>
+        <h3>Instant Registration</h3>
+        <p>Register for any event in under 60 seconds with our streamlined form.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fa-solid fa-shield-halved"></i></div>
+        <h3>Secure & Reliable</h3>
+        <p>Your data is protected and your seat is guaranteed once confirmed.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fa-solid fa-sliders"></i></div>
+        <h3>Smart Filters</h3>
+        <p>Find events by category, date, or keyword — exactly what you want.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fa-solid fa-chart-line"></i></div>
+        <h3>Live RSVP Tracking</h3>
+        <p>See real-time attendee counts and event popularity at a glance.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
