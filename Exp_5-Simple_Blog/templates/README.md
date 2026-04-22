@@ -1,6 +1,8 @@
-# Simple Blog — Experiment-5
+# Simple Blog — Flask CRUD Application
 
-A lightweight blog platform built with **Flask** (Python) supporting full **CRUD** operations using in-memory storage (no database required).
+**Experiment 5 | [Your Name] | April 21, 2026**
+
+A lightweight blog platform built with Python/Flask demonstrating full **CRUD** operations (Create, Read, Update, Delete) using in-memory storage — no database required.
 
 ---
 
@@ -10,32 +12,33 @@ A lightweight blog platform built with **Flask** (Python) supporting full **CRUD
 simple_blog/
 ├── app.py                  # Main Flask application
 ├── templates/
-│   ├── base.html           # Shared layout (nav, header, footer, CSS)
-│   ├── index.html          # Home page — lists all posts
-│   ├── create.html         # Create new post form
-│   └── edit.html           # Edit existing post form
+│   ├── base.html           # Master layout (nav, footer)
+│   ├── index.html          # Home — list all posts
+│   ├── create.html         # Create a new post
+│   └── edit.html           # Edit an existing post
 ├── static/
-│   └── style.css           # Responsive overrides
-└── README.md
+│   └── style.css           # Editorial-themed stylesheet
+└── README.md               # This file
 ```
 
 ---
 
-## Setup & Run
+## How to Run
 
+### 1. Install Flask
 ```bash
-# 1. Create & activate a virtual environment (optional)
-python -m venv venv
-source venv/bin/activate        # Windows: venv\Scripts\activate
-
-# 2. Install Flask
 pip install flask
+```
 
-# 3. Run the app
+### 2. Start the server
+```bash
 python app.py
 ```
 
-Open your browser at **http://127.0.0.1:5000**
+### 3. Open in browser
+```
+http://127.0.0.1:5000
+```
 
 ---
 
@@ -44,14 +47,13 @@ Open your browser at **http://127.0.0.1:5000**
 | Feature | Route | Method |
 |---------|-------|--------|
 | View all posts | `/` | GET |
-| Create post | `/create` | GET / POST |
-| Edit post | `/edit/<id>` | GET / POST |
-| Delete post | `/delete/<id>` | POST |
+| Create new post | `/create` | GET / POST |
+| Edit a post | `/edit/<id>` | GET / POST |
+| Delete a post | `/delete/<id>` | POST |
 
 ---
 
 ## References
-
-- [Flask Documentation](https://flask.palletsprojects.com/)
-- [Jinja2 Template Docs](https://jinja.palletsprojects.com/)
-- [Google Fonts — Playfair Display & DM Sans](https://fonts.google.com/)
+- Flask documentation: https://flask.palletsprojects.com/
+- Jinja2 templating: https://jinja.palletsprojects.com/
+- Google Fonts (Playfair Display, Source Serif 4): https://fonts.google.com/
