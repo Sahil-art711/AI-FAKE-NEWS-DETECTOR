@@ -1,48 +1,65 @@
+<!--
+  create.html — Create New Post Page
+  Extends base.html and provides a form to submit a new blog post.
+  Displays a server-side error message if validation fails.
+-->
 {% extends "base.html" %}
 
-{% block title %}Create Post — Simple Blog{% endblock %}
+{% block title %}New Post — Simple Blog{% endblock %}
 
 {% block content %}
 
-  <h1 class="page-heading">Create New Post</h1>
+  <div class="form-wrapper">
 
-  <div class="form-card">
+    <!-- Page heading -->
+    <header class="form-header">
+      <h1 class="form-title">Create a New Post</h1>
+      <p class="form-subtitle">Fill in the fields below and click <strong>Publish</strong>.</p>
+    </header>
 
-    <!-- Show validation error if present -->
+    <!-- ===== Validation Error Banner ===== -->
     {% if error %}
-      <div class="alert">⚠ {{ error }}</div>
+      <div class="alert alert-error" role="alert">
+        ⚠️ {{ error }}
+      </div>
     {% endif %}
 
-    <!--
-      POST to /create
-      Fields: title, content
-    -->
-    <form action="{{ url_for('create') }}" method="POST">
+    <!-- ===== Create Post Form ===== -->
+    <!-- POST to /create; Flask handles the submission -->
+    <form action="{{ url_for('create') }}" method="POST" class="blog-form" novalidate>
 
+      <!-- Title field -->
       <div class="form-group">
-        <label for="title">Post Title</label>
+        <label for="title" class="form-label">Post Title</label>
         <input
           type="text"
           id="title"
           name="title"
+          class="form-input"
           placeholder="Enter a compelling title…"
-          value="{{ request.form.get('title', '') }}"
+          value="{{ title }}"
+          maxlength="120"
           required
+          autofocus
         />
       </div>
 
+      <!-- Content field -->
       <div class="form-group">
-        <label for="content">Content</label>
+        <label for="content" class="form-label">Content</label>
         <textarea
           id="content"
           name="content"
-          placeholder="Write your post here…"
+          class="form-textarea"
+          placeholder="Write your post content here…"
+          rows="10"
           required
-        >{{ request.form.get('content', '') }}</textarea>
+        >{{ content }}</textarea>
       </div>
 
+      <!-- Submit + Cancel -->
       <div class="form-actions">
-        <button type="submit" class="btn btn-primary">Publish Post</button>
+        <button type="submit" class="btn btn-primary">📤 Publish Post</button>
         <a href="{{ url_for('index') }}" class="btn btn-secondary">Cancel</a>
       </div>
 
