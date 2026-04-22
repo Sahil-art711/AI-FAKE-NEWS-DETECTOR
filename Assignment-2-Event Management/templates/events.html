@@ -1,0 +1,78 @@
+{# events.html — Events Listing Page #}
+{% extends "base.html" %}
+{% block title %}Events{% endblock %}
+
+{% block content %}
+
+<section class="page-hero">
+  <div class="container">
+    <h1><i class="fa-solid fa-calendar-days"></i> Browse Events</h1>
+    <p>Explore upcoming events and grab your spot before they fill up.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+
+    <!-- Search & Filter Bar -->
+    <div class="search-filter-bar">
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="searchInput" placeholder="Search events…"
+               value="{{ query }}" oninput="liveSearch()" />
+      </div>
+      <div class="filter-buttons" id="categoryFilters">
+        {% for cat in all_categories %}
+          <a href="{{ url_for('events_page') }}?category={{ cat }}&q={{ query }}"
+             class="filter-btn {% if category == cat %}active{% endif %}">{{ cat }}</a>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Results Count -->
+    <p class="results-count" id="resultsCount">
+      Showing <strong>{{ events | length }}</strong> event{% if events | length != 1 %}s{% endif %}
+      {% if query %} for "<em>{{ query }}</em>"{% endif %}
+      {% if category != 'All' %} in <em>{{ category }}</em>{% endif %}
+    </p>
+
+    <!-- Events Grid -->
+    {% if events %}
+    <div class="events-grid" id="eventsGrid">
+      {% for event in events %}
+      <article class="event-card" data-name="{{ event.name | lower }}" data-desc="{{ event.description | lower }}">
+        <figure class="event-img">
+          <img src="{{ event.image_url }}" alt="{{ event.name }}" loading="lazy" />
+          <span class="event-category">{{ event.category }}</span>
+        </figure>
+        <div class="event-body">
+          <h3 class="event-title">{{ event.name }}</h3>
+          <div class="event-meta">
+            <span><i class="fa-regular fa-calendar"></i> {{ event.date }}</span>
+            <span><i class="fa-regular fa-clock"></i> {{ event.time }}</span>
+          </div>
+          <div class="event-meta">
+            <span><i class="fa-solid fa-location-dot"></i> {{ event.venue }}</span>
+          </div>
+          <p class="event-desc">{{ event.description[:130] }}…</p>
+          <div class="event-footer">
+            <span class="rsvp-count"><i class="fa-solid fa-users"></i> {{ event.rsvp_count }} going</span>
+            <a href="{{ url_for('register') }}?event_id={{ event.id }}" class="btn btn-primary btn-sm">Register</a>
+          </div>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <i class="fa-solid fa-calendar-xmark"></i>
+      <h3>No events found</h3>
+      <p>Try adjusting your search or filter criteria.</p>
+      <a href="{{ url_for('events_page') }}" class="btn btn-primary">Clear Filters</a>
+    </div>
+    {% endif %}
+
+  </div>
+</section>
+
+{% endblock %}
