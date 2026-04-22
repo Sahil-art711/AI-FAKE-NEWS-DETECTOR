@@ -90,6 +90,6 @@ spam_news_detector/
 ---
 
 ## 👤 Author
-- **Student Name:** ___________________________
-- **Enrollment No:** ___________________________
+- **Student Name:** Sahil
+- **Enrollment No:** _____
 - **Course:** AI & ML Laboratory
