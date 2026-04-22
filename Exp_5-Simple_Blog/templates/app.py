@@ -1,126 +1,146 @@
-# ============================================================
-# Project Title : Simple Blog Platform (Experiment-5)
+# =============================================================
+# Project Title : Simple Blog Platform (Flask CRUD App)
 # Author        : [Your Name]
-# Date          : April 2, 2026
-# Description   : A simple Flask-based blog with full CRUD
-#                 operations using in-memory storage (no DB).
-# ============================================================
+# Date          : April 21, 2026
+# Description   : A lightweight blog built with Flask that
+#                 demonstrates full CRUD — Create, Read,
+#                 Update, and Delete — using in-memory storage
+#                 (no database required).
+# =============================================================
 
 from flask import Flask, render_template, request, redirect, url_for
-from datetime import datetime
 
-# --- App Initialization ---
+# -------------------------------------------------------
+# App Initialisation
+# -------------------------------------------------------
 app = Flask(__name__)
 
-# --- In-Memory Storage ---
+# -------------------------------------------------------
+# In-Memory Storage
 # Each post is a dict: { id, title, content, date }
-posts = [
-    {
-        "id": 1,
-        "title": "Welcome to Simple Blog",
-        "content": "This is your first blog post! Use the navigation above to create, edit, or delete posts. This platform was built with Flask as part of Experiment-5.",
-        "date": "April 2, 2026"
-    },
-    {
-        "id": 2,
-        "title": "Getting Started with Flask",
-        "content": "Flask is a lightweight Python web framework. It's perfect for building small to medium web applications quickly and cleanly. Combined with Jinja2 templates, it makes web development a breeze.",
-        "date": "April 2, 2026"
-    }
-]
-
-# Counter to generate unique post IDs
-next_id = 3
+# -------------------------------------------------------
+posts = []          # list that holds all blog posts
+next_id = 1        # auto-incrementing post ID counter
 
 
 # -------------------------------------------------------
-# HOME ROUTE — Read: Display all posts
+# Helper: generate a simple human-readable date string
 # -------------------------------------------------------
-@app.route("/")
+def current_date():
+    """Return today's date formatted as 'DD Mon YYYY'."""
+    from datetime import date
+    return date.today().strftime("%d %b %Y")
+
+
+# ================================================================
+# ROUTE 1 — Home  (READ – display all posts)
+# ================================================================
+@app.route('/')
 def index():
-    """Render the home page with all blog posts."""
-    return render_template("index.html", posts=posts)
+    """
+    Home page: lists every blog post in reverse-chronological order
+    (newest first) so the latest content always appears at the top.
+    """
+    # Reverse the list so newest posts appear first
+    all_posts = list(reversed(posts))
+    return render_template('index.html', posts=all_posts)
 
 
-# -------------------------------------------------------
-# CREATE ROUTE — Add a new blog post
-# -------------------------------------------------------
-@app.route("/create", methods=["GET", "POST"])
+# ================================================================
+# ROUTE 2 — Create Post  (CREATE)
+# GET  → show the blank create form
+# POST → validate input, append new post, redirect to home
+# ================================================================
+@app.route('/create', methods=['GET', 'POST'])
 def create():
     """
-    GET  -> Show the create post form.
-    POST -> Validate input, append new post, redirect home.
+    GET : Render the create-post form.
+    POST: Read submitted title & content, build a new post dict,
+          append it to the global list, then redirect to home.
     """
-    global next_id
-    error = None
+    global next_id   # we need to modify the module-level counter
 
-    if request.method == "POST":
-        title   = request.form.get("title", "").strip()
-        content = request.form.get("content", "").strip()
+    if request.method == 'POST':
+        title   = request.form.get('title', '').strip()
+        content = request.form.get('content', '').strip()
 
-        # Basic validation
+        # Basic server-side validation — reject blank fields
         if not title or not content:
             error = "Both title and content are required."
-        else:
-            new_post = {
-                "id":      next_id,
-                "title":   title,
-                "content": content,
-                "date":    datetime.now().strftime("%B %d, %Y")
-            }
-            posts.append(new_post)
-            next_id += 1
-            return redirect(url_for("index"))
+            return render_template('create.html', error=error,
+                                   title=title, content=content)
 
-    return render_template("create.html", error=error)
+        # Build and store the new post
+        new_post = {
+            'id'     : next_id,
+            'title'  : title,
+            'content': content,
+            'date'   : current_date()
+        }
+        posts.append(new_post)
+        next_id += 1
+
+        return redirect(url_for('index'))
+
+    # GET request — render empty form
+    return render_template('create.html', error=None, title='', content='')
 
 
-# -------------------------------------------------------
-# EDIT ROUTE — Update an existing blog post
-# -------------------------------------------------------
-@app.route("/edit/<int:post_id>", methods=["GET", "POST"])
+# ================================================================
+# ROUTE 3 — Edit Post  (UPDATE)
+# GET  → pre-fill form with existing post data
+# POST → update the post in the list, redirect to home
+# ================================================================
+@app.route('/edit/<int:post_id>', methods=['GET', 'POST'])
 def edit(post_id):
     """
-    GET  -> Show the edit form pre-filled with existing data.
-    POST -> Save updated title/content, redirect home.
+    GET : Find the post by ID and render a pre-filled edit form.
+    POST: Apply the new title/content to the post dict in-place,
+          then redirect back to home.
     """
-    # Find the post by ID
-    post = next((p for p in posts if p["id"] == post_id), None)
-
+    # Locate the post; return 404 if not found
+    post = next((p for p in posts if p['id'] == post_id), None)
     if post is None:
         return "Post not found.", 404
 
-    error = None
+    if request.method == 'POST':
+        title   = request.form.get('title', '').strip()
+        content = request.form.get('content', '').strip()
 
-    if request.method == "POST":
-        title   = request.form.get("title", "").strip()
-        content = request.form.get("content", "").strip()
-
+        # Validation
         if not title or not content:
             error = "Both title and content are required."
-        else:
-            # Update in place
-            post["title"]   = title
-            post["content"] = content
-            post["date"]    = datetime.now().strftime("%B %d, %Y") + " (edited)"
-            return redirect(url_for("index"))
+            return render_template('edit.html', post=post, error=error)
 
-    return render_template("edit.html", post=post, error=error)
+        # Update post in-place
+        post['title']   = title
+        post['content'] = content
+
+        return redirect(url_for('index'))
+
+    # GET — render the form pre-filled with current post data
+    return render_template('edit.html', post=post, error=None)
 
 
-# -------------------------------------------------------
-# DELETE ROUTE — Remove a blog post
-# -------------------------------------------------------
-@app.route("/delete/<int:post_id>", methods=["POST"])
+# ================================================================
+# ROUTE 4 — Delete Post  (DELETE)
+# POST-only route to remove a post from the list.
+# ================================================================
+@app.route('/delete/<int:post_id>', methods=['POST'])
 def delete(post_id):
-    """Remove the post with the given ID and redirect to home."""
+    """
+    Find the post with the given ID and remove it from storage.
+    Redirect back to the home page after deletion.
+    Using POST (not GET) prevents accidental deletion via URL.
+    """
     global posts
-    posts = [p for p in posts if p["id"] != post_id]
-    return redirect(url_for("index"))
+    posts = [p for p in posts if p['id'] != post_id]
+    return redirect(url_for('index'))
 
 
-# -------------------------------------------------------
-# Run the development server
-# -------------------------------------------------------
-if __name__ == "__main__":
+# ================================================================
+# App Entry Point
+# ================================================================
+if __name__ == '__main__':
+    # debug=True enables auto-reload and helpful error pages
     app.run(debug=True)
