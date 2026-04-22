@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About – AI News Detector</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-brand">
+    <span class="nav-icon">🧠</span>
+    <span>AI News Detector</span>
+  </div>
+  <div class="nav-links">
+    <a href="/">Detector</a>
+    <a href="/about" class="active">About</a>
+  </div>
+  <button class="theme-toggle" id="themeToggle" title="Toggle theme">🌙</button>
+</nav>
+
+<section class="hero">
+  <h1>About This Project</h1>
+  <p class="hero-sub">An end-to-end AI pipeline for detecting Fake &amp; Spam News using NLP and Machine Learning.</p>
+</section>
+
+<main class="container">
+
+  <div class="card about-card">
+    <h2>🎯 Project Overview</h2>
+    <p>This project builds a complete AI-powered Spam News Detector. It uses Natural Language Processing (NLP) to preprocess raw news text, TF-IDF vectorization to extract features, and a trained Machine Learning classifier to predict whether a given news article is <strong>Real</strong> or <strong>Fake/Spam</strong>.</p>
+  </div>
+
+  <div class="about-grid">
+    <div class="card about-card">
+      <h3>🔬 Tech Stack</h3>
+      <ul class="about-list">
+        <li><strong>Python 3.x</strong> – Core language</li>
+        <li><strong>Flask</strong> – Web framework & API server</li>
+        <li><strong>scikit-learn</strong> – ML models (PAC, LR, NB)</li>
+        <li><strong>NLTK</strong> – Stopwords, stemming</li>
+        <li><strong>TF-IDF Vectorizer</strong> – Feature extraction</li>
+        <li><strong>Pandas / NumPy</strong> – Data handling</li>
+        <li><strong>Matplotlib / Seaborn</strong> – Visualization</li>
+        <li><strong>HTML5 / CSS3 / JS</strong> – Frontend</li>
+      </ul>
+    </div>
+
+    <div class="card about-card">
+      <h3>⚙️ Pipeline Steps</h3>
+      <ol class="about-list">
+        <li>Load labeled dataset (fake.csv + true.csv)</li>
+        <li>EDA — shape, nulls, class distribution</li>
+        <li>Text cleaning — lowercase, remove URLs/HTML/special chars</li>
+        <li>Stopword removal + Porter Stemming</li>
+        <li>TF-IDF Vectorization (max 5000 features, bigrams)</li>
+        <li>Train Passive Aggressive Classifier (primary)</li>
+        <li>Evaluate — accuracy, confusion matrix, F1-score</li>
+        <li>Save model via joblib</li>
+        <li>Serve via Flask REST API</li>
+        <li>Display result in interactive web UI</li>
+      </ol>
+    </div>
+
+    <div class="card about-card">
+      <h3>📊 Models Compared</h3>
+      <table class="history-table">
+        <thead><tr><th>Model</th><th>Typical Accuracy</th></tr></thead>
+        <tbody>
+          <tr><td>Passive Aggressive Classifier</td><td>~93–96%</td></tr>
+          <tr><td>Logistic Regression</td><td>~91–94%</td></tr>
+          <tr><td>Naive Bayes</td><td>~87–91%</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:0.8rem; font-size:0.85rem; opacity:0.7">Accuracy depends on dataset size and quality.</p>
+    </div>
+
+    <div class="card about-card">
+      <h3>📂 Dataset</h3>
+      <p>This project is designed for the <strong>Kaggle Fake News Dataset</strong> which contains two CSV files:</p>
+      <ul class="about-list">
+        <li><code>data/fake.csv</code> – Fake/spam news articles (label = 0)</li>
+        <li><code>data/true.csv</code> – Real news articles (label = 1)</li>
+      </ul>
+      <p style="margin-top:0.6rem">If the dataset is not present, the trainer auto-generates synthetic demo data so you can still test the full pipeline.</p>
+    </div>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <p>AI Spam News Detector &nbsp;|&nbsp; NLP + ML Project &nbsp;|&nbsp; Built with Python Flask &amp; scikit-learn</p>
+</footer>
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
