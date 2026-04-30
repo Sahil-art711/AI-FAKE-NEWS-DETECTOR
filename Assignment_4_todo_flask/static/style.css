@@ -1,0 +1,8 @@
+body{font-family:Arial;margin:0}
+nav{background:#222;color:#fff;padding:10px}
+.input-panel, .filters{padding:10px}
+.task{padding:10px;margin:5px;border-radius:5px}
+.task.low{border-left:5px solid green}
+.task.medium{border-left:5px solid orange}
+.task.high{border-left:5px solid red}
+.completed span{text-decoration:line-through;opacity:0.6}
