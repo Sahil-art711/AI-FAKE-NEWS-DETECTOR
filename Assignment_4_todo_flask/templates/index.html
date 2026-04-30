@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="input-panel">
+<input id="title" placeholder="Title">
+<textarea id="desc" placeholder="Description"></textarea>
+<select id="priority">
+<option value="low">Low</option>
+<option value="medium">Medium</option>
+<option value="high">High</option>
+</select>
+<button onclick="addTask()">Add Task</button>
+</div>
+
+<div class="filters">
+<button onclick="filterTasks('all')">All</button>
+<button onclick="filterTasks('active')">Active</button>
+<button onclick="filterTasks('completed')">Completed</button>
+</div>
+
+<div id="task-list"></div>
+
+<p id="empty">No tasks yet!</p>
+
+{% endblock %}
